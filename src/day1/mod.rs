@@ -2,26 +2,39 @@ pub fn input_generator(input: &str) -> Vec<u32> {
     input
         .split("\n")
         .into_iter()
-        .map(|num| num.trim().parse::<u32>().expect("Error parsing &str into u32"))
+        .map(|num| {
+            num.trim()
+                .parse::<u32>()
+                .expect("Error parsing &str into u32")
+        })
         .collect()
 }
 
 pub fn part1(input: &[u32]) -> usize {
     input
-        .into_iter()
-        .enumerate()
-        .skip(1)
-        .filter(|(idx, val)| val > &&input[idx - 1])
-        .count()
+        .windows(2)
+        .fold(0, |acc, x| if x[0] < x[1] { acc + 1 } else { acc })
 }
 
 pub fn part2(input: &[u32]) -> usize {
-    let sliding_window: Vec<u32> = input
-        .iter()
-        .enumerate()
-        .take_while(|(idx, _)| *idx <= input.len() - 3)
-        .map(|(idx, x)| x + input[idx + 1] + input[idx + 2])
-        .collect();
+    let mut p = input
+        .windows(3)
+        .map(|x| x.iter().fold(0, |acc, x| acc + x))
+        .peekable();
+
+    let mut count = 0;
+    while let Some(x) = p.next() {
+        if let Some(&p) = p.peek() {
+            if x < p {
+                count += 1;
+            }
+        }
+    }
+    count
+}
+
+pub fn part2_orig(input: &[u32]) -> usize {
+    let sliding_window: Vec<u32> = input.windows(3).map(|x| x.iter().sum()).collect();
 
     sliding_window
         .iter()
@@ -33,8 +46,8 @@ pub fn part2(input: &[u32]) -> usize {
 
 #[cfg(test)]
 mod tests {
-    use crate::read_input_file;
     use super::*;
+    use crate::read_input_file;
 
     #[test]
     fn part1_test() {
