@@ -33,6 +33,25 @@ pub fn part2(input: &[u32]) -> usize {
     count
 }
 
+pub fn part2_lookback(input: &[u32]) -> usize {
+    let sliding_window = input
+        .windows(3)
+        .map(|x| x.iter().fold(0, |acc, x| acc + x));
+
+    let mut count = 0;
+    let mut last = None;
+    for ea in sliding_window {
+        if let Some(last) = last {
+            if last < ea {
+                count += 1;
+            }
+        } else {
+            last = Some(ea);
+        }
+    }
+    count
+}
+
 pub fn part2_orig(input: &[u32]) -> usize {
     let sliding_window: Vec<u32> = input.windows(3).map(|x| x.iter().sum()).collect();
 

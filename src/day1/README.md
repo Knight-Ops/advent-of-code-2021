@@ -1,11 +1,15 @@
 ```
-day 1 part 1            time:   [472.62 ns 473.90 ns 475.57 ns]
-                        change: [+0.6059% +0.8762% +1.1229%] (p = 0.00 < 0.05)
+day 1 part 1            time:   [472.34 ns 473.14 ns 473.91 ns]
+                        change: [-0.9903% -0.6952% -0.4500%] (p = 0.00 < 0.05)
                         Change within noise threshold.
 
-day 1 part 2            time:   [2.1238 us 2.1300 us 2.1368 us]
-                        change: [-1.2554% -0.7106% -0.2008%] (p = 0.01 < 0.05)
+day 1 part 2            time:   [2.1367 us 2.1418 us 2.1479 us]
+                        change: [+0.4093% +0.9671% +1.7216%] (p = 0.00 < 0.05)
                         Change within noise threshold.
 
-day 1 part 2 orig       time:   [3.6534 us 3.6702 us 3.6889 us]
+day 1 part 2 lookback   time:   [824.76 ns 827.41 ns 830.62 ns]
+
+day 1 part 2 orig       time:   [4.7499 us 4.7724 us 4.7989 us]
+                        change: [+29.740% +30.473% +31.264%] (p = 0.00 < 0.05)
+                        Performance has regressed.
 ```
