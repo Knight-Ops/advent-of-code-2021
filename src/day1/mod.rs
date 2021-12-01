@@ -2,7 +2,7 @@ pub fn input_generator(input: &str) -> Vec<u32> {
     input
         .split("\n")
         .into_iter()
-        .map(|num| num.parse::<u32>().expect("Error parsing &str into u32"))
+        .map(|num| num.trim().parse::<u32>().expect("Error parsing &str into u32"))
         .collect()
 }
 
@@ -33,39 +33,22 @@ pub fn part2(input: &[u32]) -> usize {
 
 #[cfg(test)]
 mod tests {
+    use crate::read_input_file;
     use super::*;
 
     #[test]
     fn part1_test() {
-        let i = "199
-200
-208
-210
-200
-207
-240
-269
-260
-263";
+        let i = read_input_file("input/2021/day1_test.txt");
 
-        let input = input_generator(i);
+        let input = input_generator(&i);
         assert_eq!(part1(&input), 7);
     }
 
     #[test]
     fn part2_test() {
-        let i = "199
-200
-208
-210
-200
-207
-240
-269
-260
-263";
+        let i = read_input_file("input/2021/day1_test.txt");
 
-        let input = input_generator(i);
+        let input = input_generator(&i);
         assert_eq!(part2(&input), 5);
     }
 }
