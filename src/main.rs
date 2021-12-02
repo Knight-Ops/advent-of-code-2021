@@ -7,6 +7,8 @@ macro_rules! run {
 
             let formatted_input = $lib::input_generator(&raw_input);
 
+            println!("================= {} =================", stringify!($lib));
+
             let part1 = $lib::part1(&formatted_input);
             println!("Solution for {} Part 1 : {}", stringify!($lib), part1);
 
@@ -19,6 +21,8 @@ macro_rules! run {
             let raw_input = read_input_file(&format!("input/2021/{}.txt", stringify!($lib)));
 
             let formatted_input = $lib::input_generator(&raw_input);
+
+            println!("================= {} =================", stringify!($lib));
 
             let part1 = $lib::part1(&formatted_input);
             println!("Solution for {} Part 1 : {}", stringify!($lib), part1);

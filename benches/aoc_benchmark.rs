@@ -22,6 +22,6 @@ macro_rules! bench_please {
 bench_please!(day1, part2_lookback, part2_orig);
 bench_please!(day2);
 
-// criterion_group!(benches, day1, day2);
-criterion_group!(benches, day2);
+criterion_group!(benches, day1, day2);
+// criterion_group!(benches, day2);
 criterion_main!(benches);

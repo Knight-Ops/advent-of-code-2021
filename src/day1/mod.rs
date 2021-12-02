@@ -39,13 +39,13 @@ pub fn part2_lookback(input: &[u32]) -> usize {
     let mut count = 0;
     let mut last = None;
     for ea in sliding_window {
-        if let Some(last) = last {
-            if last < ea {
+        if let Some(last_val) = last {
+            if last_val < ea {
                 count += 1;
             }
-        } else {
-            last = Some(ea);
         }
+
+        last = Some(ea);
     }
     count
 }
