@@ -69,12 +69,15 @@ mod tests {
             #[test]
             fn $func() {
                 let name = module_path!().split("::").collect::<Vec<&str>>();
-                let i = read_input_file(&format!("input/2021/{}_test.txt", name[name.len() - 2].trim()));
+                let i = read_input_file(&format!(
+                    "input/2021/{}_test.txt",
+                    name[name.len() - 2].trim()
+                ));
 
                 let input = super::input_generator(&i);
                 assert_eq!(super::$func(&input), $val);
             }
-        }
+        };
     }
 
     test!(part1, 7);

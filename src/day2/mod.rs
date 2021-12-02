@@ -1,70 +1,85 @@
 pub enum Direction {
-    Forward,
-    Down,
-    Up,
-    Empty,
+    Forward(u32),
+    Down(u32),
+    Up(u32),
 }
 
-pub fn input_generator(input: &str) -> Vec<(Direction, u32)> {
+pub fn input_generator(input: &str) -> Vec<Direction> {
     input
         .split("\n")
         .into_iter()
         .map(|x| {
-            let mut d = Direction::Empty;
-            let mut v = 0;
-            for (idx, val) in x.split(" ").enumerate() {
-                match idx {
-                    0 => match val {
-                        "forward" => d = Direction::Forward,
-                        "up" => d = Direction::Up,
-                        "down" => d = Direction::Down,
-                        _ => panic!("Unexpected input while parsing direction"),
-                    },
-                    1 => {
-                        v = val
-                            .trim()
-                            .parse::<u32>()
-                            .expect("Error while parsing &str into u32");
-                    }
-                    _ => panic!("There are more than two entries in the input line"),
-                }
-            }
+            // let mut d = Direction::Empty;
+            // let mut v = 0;
+            // for (idx, val) in x.split(" ").enumerate() {
+            //     match idx {
+            //         0 => match val {
+            //             "forward" => d = Direction::Forward,
+            //             "up" => d = Direction::Up,
+            //             "down" => d = Direction::Down,
+            //             _ => panic!("Unexpected input while parsing direction"),
+            //         },
+            //         1 => {
+            //             v = val
+            //                 .trim()
+            //                 .parse::<u32>()
+            //                 .expect("Error while parsing &str into u32");
+            //         }
+            //         _ => panic!("There are more than two entries in the input line"),
+            //     }
+            // }
 
-            (d, v)
+            // (d, v)
+
+            let mut command = x.split(" ");
+            let cmd_str = command
+                .next()
+                .expect("Error while getting directional command");
+            let cmd_val = command
+                .next()
+                .expect("Error while getting directional value")
+                .trim()
+                .parse::<u32>()
+                .expect("Error while parsing u32 from cmd_val");
+
+            match cmd_str {
+                "forward" => Direction::Forward(cmd_val),
+                "up" => Direction::Up(cmd_val),
+                "down" => Direction::Down(cmd_val),
+                _ => panic!("Unexpected input while parsing direction"),
+            }
         })
         .collect()
 }
 
-pub fn part1(input: &[(Direction, u32)]) -> usize {
+pub fn part1(input: &[Direction]) -> usize {
     let mut horizontal = 0;
     let mut depth = 0;
 
-    for (dir, val) in input {
+    for dir in input {
         match dir {
-            Direction::Up => depth -= val,
-            Direction::Down => depth += val,
-            Direction::Forward => horizontal += val,
-            Direction::Empty => panic!("Empty Direction should not exist"),
+            Direction::Up(val) => depth -= val,
+            Direction::Down(val) => depth += val,
+            Direction::Forward(val) => horizontal += val,
         }
     }
 
     (horizontal * depth) as usize
 }
 
-pub fn part2(input: &[(Direction, u32)]) -> usize {
+pub fn part2(input: &[Direction]) -> usize {
     let mut horizontal = 0;
     let mut depth = 0;
     let mut aim = 0;
 
-    for (dir, val) in input {
+    for dir in input {
         match dir {
-            Direction::Up => aim -= val,
-            Direction::Down => aim += val,
-            Direction::Forward => {
+            Direction::Up(val) => aim -= val,
+            Direction::Down(val) => aim += val,
+            Direction::Forward(val) => {
                 horizontal += val;
                 depth += aim * val
             }
-            Direction::Empty => panic!("Empty Direction should not exist"),
         }
     }
 
@@ -79,12 +94,15 @@ mod tests {
             #[test]
             fn $func() {
                 let name = module_path!().split("::").collect::<Vec<&str>>();
-                let i = read_input_file(&format!("input/2021/{}_test.txt", name[name.len() - 2].trim()));
+                let i = read_input_file(&format!(
+                    "input/2021/{}_test.txt",
+                    name[name.len() - 2].trim()
+                ));
 
                 let input = super::input_generator(&i);
                 assert_eq!(super::$func(&input), $val);
             }
-        }
+        };
     }
 
     test!(part1, 150);
