@@ -34,9 +34,7 @@ pub fn part2(input: &[u32]) -> usize {
 }
 
 pub fn part2_lookback(input: &[u32]) -> usize {
-    let sliding_window = input
-        .windows(3)
-        .map(|x| x.iter().fold(0, |acc, x| acc + x));
+    let sliding_window = input.windows(3).map(|x| x.iter().fold(0, |acc, x| acc + x));
 
     let mut count = 0;
     let mut last = None;
