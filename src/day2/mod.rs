@@ -9,28 +9,6 @@ pub fn input_generator(input: &str) -> Vec<Direction> {
         .split("\n")
         .into_iter()
         .map(|x| {
-            // let mut d = Direction::Empty;
-            // let mut v = 0;
-            // for (idx, val) in x.split(" ").enumerate() {
-            //     match idx {
-            //         0 => match val {
-            //             "forward" => d = Direction::Forward,
-            //             "up" => d = Direction::Up,
-            //             "down" => d = Direction::Down,
-            //             _ => panic!("Unexpected input while parsing direction"),
-            //         },
-            //         1 => {
-            //             v = val
-            //                 .trim()
-            //                 .parse::<u32>()
-            //                 .expect("Error while parsing &str into u32");
-            //         }
-            //         _ => panic!("There are more than two entries in the input line"),
-            //     }
-            // }
-
-            // (d, v)
-
             let mut command = x.split(" ");
             let cmd_str = command
                 .next()
