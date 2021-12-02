@@ -1,9 +1,11 @@
 ```
-day2 part 1             time:   [3.8068 us 3.8246 us 3.8437 us]
-                        change: [-5.8636% -5.3844% -4.8688%] (p = 0.00 < 0.05)
-                        Performance has improved.
+day2 input parser       time:   [52.157 us 52.326 us 52.516 us]
 
-day2 part 2             time:   [3.7923 us 3.8010 us 3.8103 us]
-                        change: [-6.0146% -5.6021% -5.2036%] (p = 0.00 < 0.05)
+day2 part 1             time:   [1.1412 us 1.1437 us 1.1460 us]
+                        change: [+1.2675% +1.7040% +2.1389%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+
+day2 part 2             time:   [1.1807 us 1.1844 us 1.1882 us]
+                        change: [-9.1023% -8.6423% -8.2261%] (p = 0.00 < 0.05)
                         Performance has improved.
 ```
