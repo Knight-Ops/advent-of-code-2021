@@ -1,15 +1,27 @@
 use advent_of_code_2021::*;
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{criterion_group, criterion_main, Criterion};
 
-pub fn day1_benchmark(c: &mut Criterion) {
-    let input = day1::input_generator(&read_input_file("input/2021/day1.txt"));
-    c.bench_function("day 1 part 1", |b| b.iter(|| day1::part1(&input)));
-    c.bench_function("day 1 part 2", |b| b.iter(|| day1::part2(&input)));
-    c.bench_function("day 1 part 2 lookback", |b| {
-        b.iter(|| day1::part2_lookback(&input))
-    });
-    c.bench_function("day 1 part 2 orig", |b| b.iter(|| day1::part2_orig(&input)));
+macro_rules! bench_please {
+    ($lib:ident) => {
+        pub fn $lib(c: &mut Criterion) {
+            let input = $lib::input_generator(&read_input_file(&format!("input/2021/{}.txt", stringify!($lib))));
+            c.bench_function(&format!("{} part 1", stringify!($lib)), |b| b.iter(|| $lib::part1(&input)));
+            c.bench_function(&format!("{} part 2", stringify!($lib)), |b| b.iter(|| $lib::part2(&input)));
+        }
+    };
+    ($lib:ident, $($func:ident),+) => {
+        pub fn $lib(c: &mut Criterion) {
+            let input = $lib::input_generator(&read_input_file(&format!("input/2021/{}.txt", stringify!($lib))));
+            c.bench_function(&format!("{} part 1", stringify!($lib)), |b| b.iter(|| $lib::part1(&input)));
+            c.bench_function(&format!("{} part 2", stringify!($lib)), |b| b.iter(|| $lib::part2(&input)));
+            $(c.bench_function(&format!("{} {}", stringify!($lib), stringify!($func)), |b| b.iter(|| $lib::$func(&input)));)*
+        }
+    }
 }
 
-criterion_group!(benches, day1_benchmark);
+bench_please!(day1, part2_lookback, part2_orig);
+bench_please!(day2);
+
+// criterion_group!(benches, day1, day2);
+criterion_group!(benches, day2);
 criterion_main!(benches);

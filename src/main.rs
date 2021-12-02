@@ -1,30 +1,37 @@
-use advent_of_code_2021 as aoc;
+use advent_of_code_2021::*;
+
+macro_rules! run {
+    ($lib:ident) => {
+        {
+            let raw_input = read_input_file(&format!("input/2021/{}.txt", stringify!($lib)));
+
+            let formatted_input = $lib::input_generator(&raw_input);
+
+            let part1 = $lib::part1(&formatted_input);
+            println!("Solution for {} Part 1 : {}", stringify!($lib), part1);
+
+            let part2 = $lib::part2(&formatted_input);
+            println!("Solution for {} Part 2: {}", stringify!($lib), part2);
+        }
+    };
+    ($lib:ident, $($func:ident), +) => {
+        {
+            let raw_input = read_input_file(&format!("input/2021/{}.txt", stringify!($lib)));
+
+            let formatted_input = $lib::input_generator(&raw_input);
+
+            let part1 = $lib::part1(&formatted_input);
+            println!("Solution for {} Part 1 : {}", stringify!($lib), part1);
+
+            let part2 = $lib::part2(&formatted_input);
+            println!("Solution for {} Part 2: {}", stringify!($lib), part2);
+
+            $(println!("Solution for {} {} : {}", stringify!($lib), stringify!($func), $lib::$func(&formatted_input));)*
+        }
+    }
+}
 
 fn main() {
-    day1();
-    day2();
-}
-
-fn day1() {
-    let raw_input = aoc::read_input_file("input/2021/day1.txt");
-
-    let formatted_input = aoc::day1::input_generator(&raw_input);
-
-    let part1 = aoc::day1::part1(&formatted_input);
-    println!("Solution for Day 1 Part 1 : {}", part1);
-
-    let part2 = aoc::day1::part2(&formatted_input);
-    println!("Solution for Day 1 Part 2: {}", part2);
-}
-
-fn day2() {
-    let raw_input = aoc::read_input_file("input/2021/day2.txt");
-
-    let formatted_input = aoc::day2::input_generator(&raw_input);
-
-    let part1 = aoc::day2::part1(&formatted_input);
-    println!("Solution for Day 2 Part 1 : {}", part1);
-
-    let part2 = aoc::day2::part2(&formatted_input);
-    println!("Solution for Day 2 Part 2: {}", part2);
+    run!(day1, part2_lookback, part2_orig);
+    run!(day2);
 }

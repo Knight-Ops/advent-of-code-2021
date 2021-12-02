@@ -17,15 +17,19 @@ pub fn part2(input: &[u32]) -> usize {
 #[cfg(test)]
 mod tests {
     use crate::read_input_file;
-    use super::*;
+    macro_rules! test {
+        ($func:ident, $val:expr) => {
+            #[test]
+            fn $func() {
+                let name = module_path!().split("::").collect::<Vec<&str>>();
+                let i = read_input_file(&format!("input/2021/{}_test.txt", name[name.len() - 2].trim()));
 
-    #[test]
-    fn part1_test() {
-
+                let input = super::input_generator(&i);
+                assert_eq!(super::$func(&input), $val);
+            }
+        }
     }
 
-    #[test]
-    fn part2_test() {
-
-    }
+    test!(part1, 0);
+    test!(part2, 0);
 }

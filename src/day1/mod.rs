@@ -63,22 +63,22 @@ pub fn part2_orig(input: &[u32]) -> usize {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use crate::read_input_file;
+    macro_rules! test {
+        ($func:ident, $val:expr) => {
+            #[test]
+            fn $func() {
+                let name = module_path!().split("::").collect::<Vec<&str>>();
+                let i = read_input_file(&format!("input/2021/{}_test.txt", name[name.len() - 2].trim()));
 
-    #[test]
-    fn part1_test() {
-        let i = read_input_file("input/2021/day1_test.txt");
-
-        let input = input_generator(&i);
-        assert_eq!(part1(&input), 7);
+                let input = super::input_generator(&i);
+                assert_eq!(super::$func(&input), $val);
+            }
+        }
     }
 
-    #[test]
-    fn part2_test() {
-        let i = read_input_file("input/2021/day1_test.txt");
-
-        let input = input_generator(&i);
-        assert_eq!(part2(&input), 5);
-    }
+    test!(part1, 7);
+    test!(part2, 5);
+    test!(part2_lookback, 5);
+    test!(part2_orig, 5);
 }
