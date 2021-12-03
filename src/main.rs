@@ -38,4 +38,5 @@ macro_rules! run {
 fn main() {
     run!(day1, part2_lookback, part2_orig);
     run!(day2);
+    run!(day3);
 }
