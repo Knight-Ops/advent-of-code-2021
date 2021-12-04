@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub enum Direction {
     Forward(u32),
     Down(u32),

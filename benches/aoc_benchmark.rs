@@ -23,10 +23,31 @@ macro_rules! bench_please {
     }
 }
 
+macro_rules! bench_please_mut {
+    ($lib:ident) => {
+        pub fn $lib(c: &mut Criterion) {
+            let raw_input = read_input_file(&format!("input/2021/{}.txt", stringify!($lib)));
+            c.bench_function(&format!("{} input parser", stringify!($lib)), |b| b.iter(|| $lib::input_generator(&raw_input)));
+            c.bench_function(&format!("{} part 1 + parse", stringify!($lib)), |b| b.iter(|| $lib::part1(&mut $lib::input_generator(&raw_input))));
+            c.bench_function(&format!("{} part 2 + parse", stringify!($lib)), |b| b.iter(|| $lib::part2(&mut $lib::input_generator(&raw_input))));
+        }
+    };
+    ($lib:ident, $($func:ident),+) => {
+        pub fn $lib(c: &mut Criterion) {
+            let raw_input = read_input_file(&format!("input/2021/{}.txt", stringify!($lib)));
+            c.bench_function(&format!("{} input parser", stringify!($lib)), |b| b.iter(|| $lib::input_generator(&raw_input)));
+            c.bench_function(&format!("{} part 1 + parse", stringify!($lib)), |b| b.iter(|| $lib::part1(&mut $lib::input_generator(&raw_input))));
+            c.bench_function(&format!("{} part 2 + parse", stringify!($lib)), |b| b.iter(|| $lib::part2(&mut $lib::input_generator(&raw_input))));
+            $(c.bench_function(&format!("{} {} + parse", stringify!($lib), stringify!($func)), |b| b.iter(|| $lib::$func(&mut $lib::input_generator(&raw_input))));)*
+        }
+    }
+}
+
 bench_please!(day1, part2_lookback, part2_orig);
 bench_please!(day2);
 bench_please!(day3);
+bench_please_mut!(day4);
 
-criterion_group!(all, day1, day2, day3);
-criterion_group!(single, day3);
-criterion_main!(single);
+criterion_group!(all, day1, day2, day3, day4);
+criterion_group!(single, day4);
+criterion_main!(all);

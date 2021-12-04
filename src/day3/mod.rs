@@ -94,11 +94,17 @@ pub fn part2(input: &[&[u8]]) -> usize {
     for bit in 0..input[0].len() {
         if oxygen_working_pool.len() != 1 {
             let most_common_bit = find_most_common_bits(&oxygen_working_pool);
-            oxygen_working_pool = oxygen_working_pool.into_iter().filter(|&x| x[bit] - 0x30 == most_common_bit[bit]).collect();
+            oxygen_working_pool = oxygen_working_pool
+                .into_iter()
+                .filter(|&x| x[bit] - 0x30 == most_common_bit[bit])
+                .collect();
         }
         if co2_working_pool.len() != 1 {
             let least_common_bit = find_least_common_bits(&co2_working_pool);
-            co2_working_pool = co2_working_pool.into_iter().filter(|&x| x[bit] - 0x30 == least_common_bit[bit]).collect();
+            co2_working_pool = co2_working_pool
+                .into_iter()
+                .filter(|&x| x[bit] - 0x30 == least_common_bit[bit])
+                .collect();
         }
 
         if oxygen_working_pool.len() == 1 && co2_working_pool.len() == 1 {
@@ -112,8 +118,7 @@ pub fn part2(input: &[&[u8]]) -> usize {
     let oxygen = vec_to_dec(oxygen_working_pool[0]);
     let co2_scrubber = vec_to_dec(co2_working_pool[0]);
 
-    oxygen*co2_scrubber
-
+    oxygen * co2_scrubber
 }
 
 #[cfg(test)]
