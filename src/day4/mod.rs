@@ -89,13 +89,18 @@ impl BingoBoard {
         'row: for y in 0..self.board_size {
             // let mut row_winner = true;
             for x in 0..self.board_size {
-                if !self.board.get(&Cordinate{x, y}).expect("Could not retrieve BingoSpace for provided cordinates!").is_marked() {
+                if !self
+                    .board
+                    .get(&Cordinate { x, y })
+                    .expect("Could not retrieve BingoSpace for provided cordinates!")
+                    .is_marked()
+                {
                     // row_winner = false;
                     continue 'row;
                 }
             }
 
-            return true
+            return true;
         }
 
         false
@@ -105,13 +110,18 @@ impl BingoBoard {
         'column: for x in 0..self.board_size {
             // let mut col_winner = true;
             for y in 0..self.board_size {
-                if !self.board.get(&Cordinate{x, y}).expect("Could not retrieve BingoSpace for provided cordinates!").is_marked() {
+                if !self
+                    .board
+                    .get(&Cordinate { x, y })
+                    .expect("Could not retrieve BingoSpace for provided cordinates!")
+                    .is_marked()
+                {
                     // col_winner = false;
                     continue 'column;
                 }
             }
 
-            return true
+            return true;
         }
 
         false
@@ -163,17 +173,17 @@ impl Bingo {
         }
     }
 
-    fn play(&mut self) -> Option<(Vec<BingoBoard>, usize)>{
+    fn play(&mut self) -> Option<(Vec<BingoBoard>, usize)> {
         while self.called_numbers.len() != 0 {
             if let Some(bingo_board) = self.call_number() {
-                return Some(bingo_board)
+                return Some(bingo_board);
             }
         }
 
         None
     }
 
-    fn play_until_last(&mut self) -> Option<(BingoBoard, usize)>{
+    fn play_until_last(&mut self) -> Option<(BingoBoard, usize)> {
         let mut winning_boards = 0;
         let mut last_win = (Vec::new(), 0);
         while self.called_numbers.len() != 0 {
@@ -186,7 +196,7 @@ impl Bingo {
                     if last_win.0.len() != 1 {
                         panic!("Multiple final losing boards?");
                     } else {
-                        return Some((last_win.0[0].clone(), last_win.1))
+                        return Some((last_win.0[0].clone(), last_win.1));
                     }
                 }
             }
@@ -246,19 +256,17 @@ pub fn input_generator(input: &str) -> Bingo {
 
 pub fn part1(input: &mut Bingo) -> usize {
     if let Some((winning_board, winning_number)) = input.play() {
-
         if winning_board.len() != 1 {
             panic!("We have more than one first winner");
         }
-        
+
         // We have a winning board at this point so we need to sum unmarked numbers
-        let board_value : usize = winning_board[0].board.values().into_iter().map(|x| {
-            if !x.is_marked() {
-                x.get_value()
-            } else {
-                0
-            }
-        }).sum();
+        let board_value: usize = winning_board[0]
+            .board
+            .values()
+            .into_iter()
+            .map(|x| if !x.is_marked() { x.get_value() } else { 0 })
+            .sum();
 
         // Multiply by winning number for our answer
         board_value * winning_number
@@ -269,15 +277,13 @@ pub fn part1(input: &mut Bingo) -> usize {
 
 pub fn part2(input: &mut Bingo) -> usize {
     if let Some((winning_board, winning_number)) = input.play_until_last() {
-
         // We have a winning board at this point so we need to sum unmarked numbers
-        let board_value : usize = winning_board.board.values().into_iter().map(|x| {
-            if !x.is_marked() {
-                x.get_value()
-            } else {
-                0
-            }
-        }).sum();
+        let board_value: usize = winning_board
+            .board
+            .values()
+            .into_iter()
+            .map(|x| if !x.is_marked() { x.get_value() } else { 0 })
+            .sum();
 
         // Multiply by winning number for our answer
         board_value * winning_number
