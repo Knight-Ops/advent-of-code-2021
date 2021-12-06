@@ -48,7 +48,8 @@ bench_please!(day2);
 bench_please!(day3);
 bench_please_mut!(day4);
 bench_please!(day5);
+bench_please!(day6);
 
-criterion_group!(all, day1, day2, day3, day4, day5);
-criterion_group!(single, day5);
+criterion_group!(all, day1, day2, day3, day4, day5, day6);
+criterion_group!(single, day6);
 criterion_main!(single);

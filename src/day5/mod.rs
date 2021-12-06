@@ -15,7 +15,7 @@ pub enum VerticalDirection {
 #[derive(Debug, Clone)]
 pub enum HorizontalDirection {
     Left,
-    Right
+    Right,
 }
 
 #[derive(Debug, Clone)]
@@ -42,7 +42,6 @@ pub struct Line {
 
 impl Line {
     fn find_slope(&mut self) {
-
         let y_slope = self.end.y - self.start.y;
 
         if y_slope == 0 {
@@ -75,7 +74,7 @@ impl Line {
             DiagonalType::UpLeft
         } else if self.start.y > self.end.y && self.start.x > self.end.x {
             DiagonalType::DownLeft
-        } else {        
+        } else {
             unreachable!("Somehow the line doesn't actually have slope?")
         };
 
@@ -130,7 +129,7 @@ pub fn input_generator(input: &str) -> Vec<Line> {
                 end: end_point,
                 slope: None,
             };
-            
+
             line.find_slope();
 
             line
@@ -150,35 +149,33 @@ pub fn part1(input: &[Line]) -> usize {
                 match dir {
                     &HorizontalDirection::Left => {
                         for x in line.end.x..=line.start.x {
-                            *board.entry(Point{x, y}).or_insert(0) += 1;
+                            *board.entry(Point { x, y }).or_insert(0) += 1;
                         }
                     }
                     &HorizontalDirection::Right => {
                         for x in line.start.x..=line.end.x {
-                            *board.entry(Point{x, y}).or_insert(0) += 1;
+                            *board.entry(Point { x, y }).or_insert(0) += 1;
                         }
                     }
                 }
-
-            },
+            }
             Some(Slope::Vertical(dir)) => {
                 let x = line.start.x;
 
                 match dir {
                     &VerticalDirection::Up => {
                         for y in line.start.y..=line.end.y {
-                            *board.entry(Point{x, y}).or_insert(0) += 1;
+                            *board.entry(Point { x, y }).or_insert(0) += 1;
                         }
                     }
                     &VerticalDirection::Down => {
                         for y in line.end.y..=line.start.y {
-                            *board.entry(Point{x, y}).or_insert(0) += 1;
+                            *board.entry(Point { x, y }).or_insert(0) += 1;
                         }
                     }
                 }
-
-            },
-            None => panic!("Slope was never solved for?")
+            }
+            None => panic!("Slope was never solved for?"),
         }
     }
 
@@ -192,47 +189,43 @@ pub fn part2(input: &[Line]) -> usize {
         let mut x = line.start.x;
         let mut y = line.start.y;
         match &line.slope {
-            Some(Slope::Diagonal(ty)) => {
-                match ty {
-                    &DiagonalType::UpRight => {
-                        while x != line.end.x && y != line.end.y {
-                            *board.entry(Point{x, y}).or_insert(0) += 1;
-                            x += 1;
-                            y += 1;
-                        }
+            Some(Slope::Diagonal(ty)) => match ty {
+                &DiagonalType::UpRight => {
+                    while x != line.end.x && y != line.end.y {
+                        *board.entry(Point { x, y }).or_insert(0) += 1;
+                        x += 1;
+                        y += 1;
+                    }
 
-                        *board.entry(Point{x, y}).or_insert(0) += 1;
-                    },
-                    &DiagonalType::DownRight => {
-                        while x != line.end.x && y != line.end.y {
-                            *board.entry(Point{x, y}).or_insert(0) += 1;
-                            x += 1;
-                            y -= 1;
-                        }
-
-                        *board.entry(Point{x, y}).or_insert(0) += 1;
-                    },
-                    &DiagonalType::UpLeft => {                      
-                        while x != line.end.x && y != line.end.y {
-                            *board.entry(Point{x, y}).or_insert(0) += 1;
-                            x -= 1;
-                            y += 1;
-                        }
-
-                        *board.entry(Point{x, y}).or_insert(0) += 1;
-                    },
-                    &DiagonalType::DownLeft => {
-                        while x != line.end.x && y != line.end.y {
-                            *board.entry(Point{x, y}).or_insert(0) += 1;
-                            x -= 1;
-                            y -= 1;
-                        }
-
-                        *board.entry(Point{x, y}).or_insert(0) += 1;
-                    },
+                    *board.entry(Point { x, y }).or_insert(0) += 1;
                 }
+                &DiagonalType::DownRight => {
+                    while x != line.end.x && y != line.end.y {
+                        *board.entry(Point { x, y }).or_insert(0) += 1;
+                        x += 1;
+                        y -= 1;
+                    }
 
+                    *board.entry(Point { x, y }).or_insert(0) += 1;
+                }
+                &DiagonalType::UpLeft => {
+                    while x != line.end.x && y != line.end.y {
+                        *board.entry(Point { x, y }).or_insert(0) += 1;
+                        x -= 1;
+                        y += 1;
+                    }
 
+                    *board.entry(Point { x, y }).or_insert(0) += 1;
+                }
+                &DiagonalType::DownLeft => {
+                    while x != line.end.x && y != line.end.y {
+                        *board.entry(Point { x, y }).or_insert(0) += 1;
+                        x -= 1;
+                        y -= 1;
+                    }
+
+                    *board.entry(Point { x, y }).or_insert(0) += 1;
+                }
             },
             Some(Slope::Horizontal(dir)) => {
                 // let y = line.start.y;
@@ -240,35 +233,33 @@ pub fn part2(input: &[Line]) -> usize {
                 match dir {
                     &HorizontalDirection::Left => {
                         for x in line.end.x..=line.start.x {
-                            *board.entry(Point{x, y}).or_insert(0) += 1;
+                            *board.entry(Point { x, y }).or_insert(0) += 1;
                         }
                     }
                     &HorizontalDirection::Right => {
                         for x in line.start.x..=line.end.x {
-                            *board.entry(Point{x, y}).or_insert(0) += 1;
+                            *board.entry(Point { x, y }).or_insert(0) += 1;
                         }
                     }
                 }
-
-            },
+            }
             Some(Slope::Vertical(dir)) => {
                 // let x = line.start.x;
 
                 match dir {
                     &VerticalDirection::Up => {
                         for y in line.start.y..=line.end.y {
-                            *board.entry(Point{x, y}).or_insert(0) += 1;
+                            *board.entry(Point { x, y }).or_insert(0) += 1;
                         }
                     }
                     &VerticalDirection::Down => {
                         for y in line.end.y..=line.start.y {
-                            *board.entry(Point{x, y}).or_insert(0) += 1;
+                            *board.entry(Point { x, y }).or_insert(0) += 1;
                         }
                     }
                 }
-
-            },
-            None => panic!("Slope was never solved for?")
+            }
+            None => panic!("Slope was never solved for?"),
         }
     }
 
