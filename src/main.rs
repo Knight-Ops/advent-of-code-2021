@@ -77,4 +77,5 @@ fn main() {
     run_mut!(day4);
     run!(day5);
     run!(day6);
+    run!(day7, part1_sorted, part2_naive);
 }
