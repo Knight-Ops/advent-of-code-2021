@@ -78,4 +78,5 @@ fn main() {
     run!(day5);
     run!(day6);
     run!(day7, part1_sorted, part2_naive);
+    run!(day8);
 }
