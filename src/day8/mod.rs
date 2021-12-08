@@ -31,6 +31,7 @@ pub enum SegmentSolution {
 }
 
 impl SegmentSolution {
+    /// Return `c` from Self::Solved(c)
     fn get_solved(&self) -> char {
         match self {
             Self::Solved(c) => *c,
@@ -51,6 +52,7 @@ pub struct SegmentDisplay {
 }
 
 impl SegmentDisplay {
+    /// Set `SegmentDisplay` member `jumbled_value` to Some(SegmentSolution::Possible(`solved_value`))
     fn set_possible(&mut self, jumbled_value: char, possible_corrected_values: &[char]) {
         match jumbled_value {
             'a' => {
@@ -94,6 +96,7 @@ impl SegmentDisplay {
         }
     }
 
+    /// Set `SegmentDisplay` member `jumbled_value` to Some(SegmentSolution::Solved(`solved_value`))
     fn set_solved(&mut self, jumbled_value: char, solved_value: char) {
         let solution = Some(SegmentSolution::Solved(solved_value));
 
@@ -111,6 +114,7 @@ impl SegmentDisplay {
         }
     }
 
+    /// Check to see if `SegmentDisplay` member `c` is already populated
     fn is_already_populated(&self, c: char) -> bool {
         match c {
             'a' => self.a.is_some(),
@@ -124,6 +128,7 @@ impl SegmentDisplay {
         }
     }
 
+    /// Get the value of self.`c` - a simple char to struct member retrieval
     fn get(&self, c: char) -> &Option<SegmentSolution> {
         match c {
             'a' => &self.a,
@@ -137,6 +142,7 @@ impl SegmentDisplay {
         }
     }
 
+    /// Reduce other SegmentSolution::Possible(_) entries to SegmentSolution::Solved(_) when the Possible(_) has 2 possiblities of which, one is `c` which has been solved
     fn reduce(&mut self, c: char) {
         for each in [
             &mut self.a,
@@ -163,6 +169,7 @@ impl SegmentDisplay {
         }
     }
 
+    /// Solve the oracle in steps
     fn solve(&mut self, note: &NoteEntry) {
         self.solve_a(note);
 
@@ -173,6 +180,9 @@ impl SegmentDisplay {
         self.solve_b_d_c_f(note);
     }
 
+    /// We can solve for position 'a' by using the easy to find "1" and "7" digits, by finding their 
+    /// difference, we can solve for 'a', which is the one character that doesn't overlap between the two
+    /// we also populate possibles of 'c' and 'f' in the overlapping characters
     fn solve_a(&mut self, note: &NoteEntry) {
         let mut signals: Vec<&&str> = note
             .signal_patterns
@@ -203,6 +213,8 @@ impl SegmentDisplay {
         }
     }
 
+    /// Populate possible 'b' and 'd' by ignoring any characters that were populated as possible in `solve_a`, this eliminates the 
+    /// right side of the "4" and we can populate the other two with two values, which will be important later
     fn populate_b_d(&mut self, note: &NoteEntry) {
         let signals: Vec<&&str> = note
             .signal_patterns
@@ -220,6 +232,9 @@ impl SegmentDisplay {
         }
     }
 
+    /// Solve for 'g' and 'e' locations by only looking at digits that have 5 segments lit, then we can use intersections of already
+    /// populated values to figure out which of the 5 segment digits is currently lit. Once we figure out which digit is being displayed 
+    /// we can solve for the unique segments of each one for `g` and `e` locations.
     fn solve_g_e(&mut self, note: &NoteEntry) {
         let mut signals = note
             .signal_patterns
@@ -272,6 +287,11 @@ impl SegmentDisplay {
         }
     }
 
+    /// Everything else can be solved through the remaining 6 segment lit digits and reduction
+    /// We are filtering to "0","9", and "6". "9" gives us no new information since we have already solved location 'e'
+    /// but using "6" we can solve for location 'c' which is the one segment unlit, then we can reduce for segment 'f'
+    /// since it only had two options. Likewise we can use "0" to solve for location 'd' and then reduce for location 'b'
+    /// based on the digit "4" where everything else is solved for.
     fn solve_b_d_c_f(&mut self, note: &NoteEntry) {
         let signals: Vec<&&str> = note
             .signal_patterns
@@ -310,6 +330,7 @@ impl SegmentDisplay {
         }
     }
 
+    /// Uses our completed oracle to build a string translating from the jumbled display to the original display format
     fn get_digit(&self, output_str: &str) -> char {
         let mut decoded = Vec::new();
         for c in output_str.chars() {
@@ -380,18 +401,23 @@ pub fn part1(input: &[NoteEntry]) -> usize {
         .sum()
 }
 
+/// This is what I would consider the "human" solution the approach is to build a cipher oracle for the
+/// corrupted display and then use a look up table for the displayed digits and then parse them
 pub fn part2(input: &[NoteEntry]) -> usize {
     input
         .iter()
         .map(|note_entry| {
             let mut segment_display = SegmentDisplay::default();
 
+            // Solve for our cipher oracle
             segment_display.solve(note_entry);
 
             let mut digit_display = Vec::new();
             for output in &note_entry.output_values {
+                // Use our oracle to solve for each digit
                 digit_display.push(segment_display.get_digit(output));
             }
+            // parse the display into a number
             digit_display
                 .iter()
                 .collect::<String>()
@@ -401,8 +427,8 @@ pub fn part2(input: &[NoteEntry]) -> usize {
         .sum::<usize>()
 }
 
-// This is an infinitely simpler solution, and it happens to also be faster. It relies on being able to find
-// the "unique" values, and using intersections of hashsets to quickly weed out values being displayed
+/// This is an infinitely simpler solution, and it happens to also be faster. It relies on being able to find
+/// the "unique" values, and using intersections of hashsets to quickly narrow down values being displayed
 pub fn part2_alternate(input: &[NoteEntry]) -> usize {
     input
         .iter()
