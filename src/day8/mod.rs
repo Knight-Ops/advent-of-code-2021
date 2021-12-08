@@ -1,4 +1,4 @@
-use fnv::FnvHashMap;
+use fnv::{FnvHashMap, FnvHashSet};
 use lazy_static::lazy_static;
 
 lazy_static! {
@@ -401,6 +401,70 @@ pub fn part2(input: &[NoteEntry]) -> usize {
         .sum::<usize>()
 }
 
+// This is an infinitely simpler solution, and it happens to also be faster. It relies on being able to find
+// the "unique" values, and using intersections of hashsets to quickly weed out values being displayed
+pub fn part2_alternate(input: &[NoteEntry]) -> usize {
+    input
+        .iter()
+        .map(|note_entry| {
+            let mut one_hs = FnvHashSet::default();
+            let mut four_hs = FnvHashSet::default();
+            let mut seven_hs = FnvHashSet::default();
+            let mut eight_hs = FnvHashSet::default();
+
+            for signal in &note_entry.signal_patterns {
+                if signal.len() == 2 {
+                    one_hs = signal.chars().collect();
+                } else if signal.len() == 3 {
+                    seven_hs = signal.chars().collect();
+                } else if signal.len() == 4 {
+                    four_hs = signal.chars().collect();
+                } else if signal.len() == 7 {
+                    eight_hs = signal.chars().collect();
+                }
+            }
+
+            note_entry.output_values.iter().map(|x| {
+                if x.len() == 2 {
+                    '1'
+                } else if x.len() == 3 {
+                    '7'
+                } else if x.len() == 4 {
+                    '4'
+                } else if x.len() == 7 {
+                    '8'
+                } else {
+                    let curr_hs : FnvHashSet<char> = x.chars().collect();
+
+                    if x.len() == 5 {
+                        if curr_hs.intersection(&one_hs).count() == 2 {
+                            '3'
+                        } else {
+                            let handicap_hs: FnvHashSet<char> = seven_hs.difference(&four_hs).into_iter().cloned().collect();
+
+                            if curr_hs.intersection(&handicap_hs).count() == 3 {
+                                '5'
+                            } else {
+                                '2'
+                            }
+                        }
+                    } else if x.len() == 6 {
+                        if curr_hs.intersection(&seven_hs).count() == 2 {
+                            '6'
+                        } else if curr_hs.intersection(&four_hs).count() == 4 {
+                            '9'
+                        } else {
+                            '0'
+                        }
+                    } else {
+                        unreachable!("No numbers should be left unparsed");
+                    }
+                }
+            }).collect::<String>().parse::<usize>().expect("Cannot parse output value")
+        })
+        .sum::<usize>()
+}
+
 #[cfg(test)]
 mod tests {
     use crate::read_input_file;
@@ -422,4 +486,5 @@ mod tests {
 
     test!(part1, 26);
     test!(part2, 61229);
+    test!(part2_alternate, 61229);
 }

@@ -50,7 +50,7 @@ bench_please_mut!(day4);
 bench_please!(day5);
 bench_please!(day6);
 bench_please!(day7, part1_sorted, part2_naive);
-bench_please!(day8);
+bench_please!(day8, part2_alternate);
 
 criterion_group!(all, day1, day2, day3, day4, day5, day6, day7, day8);
 criterion_group!(single, day8);
