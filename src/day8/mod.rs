@@ -180,7 +180,7 @@ impl SegmentDisplay {
         self.solve_b_d_c_f(note);
     }
 
-    /// We can solve for position 'a' by using the easy to find "1" and "7" digits, by finding their 
+    /// We can solve for position 'a' by using the easy to find "1" and "7" digits, by finding their
     /// difference, we can solve for 'a', which is the one character that doesn't overlap between the two
     /// we also populate possibles of 'c' and 'f' in the overlapping characters
     fn solve_a(&mut self, note: &NoteEntry) {
@@ -213,7 +213,7 @@ impl SegmentDisplay {
         }
     }
 
-    /// Populate possible 'b' and 'd' by ignoring any characters that were populated as possible in `solve_a`, this eliminates the 
+    /// Populate possible 'b' and 'd' by ignoring any characters that were populated as possible in `solve_a`, this eliminates the
     /// right side of the "4" and we can populate the other two with two values, which will be important later
     fn populate_b_d(&mut self, note: &NoteEntry) {
         let signals: Vec<&&str> = note
@@ -233,7 +233,7 @@ impl SegmentDisplay {
     }
 
     /// Solve for 'g' and 'e' locations by only looking at digits that have 5 segments lit, then we can use intersections of already
-    /// populated values to figure out which of the 5 segment digits is currently lit. Once we figure out which digit is being displayed 
+    /// populated values to figure out which of the 5 segment digits is currently lit. Once we figure out which digit is being displayed
     /// we can solve for the unique segments of each one for `g` and `e` locations.
     fn solve_g_e(&mut self, note: &NoteEntry) {
         let mut signals = note
@@ -450,43 +450,53 @@ pub fn part2_alternate(input: &[NoteEntry]) -> usize {
                 }
             }
 
-            note_entry.output_values.iter().map(|x| {
-                if x.len() == 2 {
-                    '1'
-                } else if x.len() == 3 {
-                    '7'
-                } else if x.len() == 4 {
-                    '4'
-                } else if x.len() == 7 {
-                    '8'
-                } else {
-                    let curr_hs : FnvHashSet<char> = x.chars().collect();
-
-                    if x.len() == 5 {
-                        if curr_hs.intersection(&one_hs).count() == 2 {
-                            '3'
-                        } else {
-                            let handicap_hs: FnvHashSet<char> = seven_hs.difference(&four_hs).into_iter().cloned().collect();
-
-                            if curr_hs.intersection(&handicap_hs).count() == 3 {
-                                '5'
-                            } else {
-                                '2'
-                            }
-                        }
-                    } else if x.len() == 6 {
-                        if curr_hs.intersection(&seven_hs).count() == 2 {
-                            '6'
-                        } else if curr_hs.intersection(&four_hs).count() == 4 {
-                            '9'
-                        } else {
-                            '0'
-                        }
+            note_entry
+                .output_values
+                .iter()
+                .map(|x| {
+                    if x.len() == 2 {
+                        '1'
+                    } else if x.len() == 3 {
+                        '7'
+                    } else if x.len() == 4 {
+                        '4'
+                    } else if x.len() == 7 {
+                        '8'
                     } else {
-                        unreachable!("No numbers should be left unparsed");
+                        let curr_hs: FnvHashSet<char> = x.chars().collect();
+
+                        if x.len() == 5 {
+                            if curr_hs.intersection(&one_hs).count() == 2 {
+                                '3'
+                            } else {
+                                let handicap_hs: FnvHashSet<char> = eight_hs
+                                    .intersection(&four_hs)
+                                    .into_iter()
+                                    .cloned()
+                                    .collect();
+
+                                if curr_hs.intersection(&handicap_hs).count() == 3 {
+                                    '5'
+                                } else {
+                                    '2'
+                                }
+                            }
+                        } else if x.len() == 6 {
+                            if curr_hs.intersection(&seven_hs).count() == 2 {
+                                '6'
+                            } else if curr_hs.intersection(&four_hs).count() == 4 {
+                                '9'
+                            } else {
+                                '0'
+                            }
+                        } else {
+                            unreachable!("No numbers should be left unparsed");
+                        }
                     }
-                }
-            }).collect::<String>().parse::<usize>().expect("Cannot parse output value")
+                })
+                .collect::<String>()
+                .parse::<usize>()
+                .expect("Cannot parse output value")
         })
         .sum::<usize>()
 }

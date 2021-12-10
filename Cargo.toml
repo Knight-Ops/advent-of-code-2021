@@ -15,3 +15,6 @@ criterion = "0.3"
 [[bench]]
 name = "aoc_benchmark"
 harness = false
+
+[profile.release]
+debug = true

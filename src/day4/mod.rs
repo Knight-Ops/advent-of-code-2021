@@ -3,14 +3,14 @@ use std::collections::VecDeque;
 use fnv::FnvHashMap;
 
 #[derive(Default, Debug, Clone, Hash, PartialEq, Eq)]
-pub struct Cordinate {
+pub struct Coordinate {
     x: usize,
     y: usize,
 }
 
-impl Cordinate {
+impl Coordinate {
     fn new(x: usize, y: usize) -> Self {
-        Cordinate { x, y }
+        Coordinate { x, y }
     }
 }
 
@@ -43,14 +43,14 @@ impl BingoSpace {
 
 #[derive(Default, Debug, Clone)]
 pub struct BingoBoard {
-    board: FnvHashMap<Cordinate, BingoSpace>,
+    board: FnvHashMap<Coordinate, BingoSpace>,
     numbers_marked: usize,
     board_size: usize,
     completed: bool,
 }
 
 impl BingoBoard {
-    fn insert(&mut self, k: Cordinate, v: BingoSpace) -> Option<BingoSpace> {
+    fn insert(&mut self, k: Coordinate, v: BingoSpace) -> Option<BingoSpace> {
         self.board.insert(k, v)
     }
 
@@ -91,8 +91,8 @@ impl BingoBoard {
             for x in 0..self.board_size {
                 if !self
                     .board
-                    .get(&Cordinate { x, y })
-                    .expect("Could not retrieve BingoSpace for provided cordinates!")
+                    .get(&Coordinate { x, y })
+                    .expect("Could not retrieve BingoSpace for provided Coordinates!")
                     .is_marked()
                 {
                     // row_winner = false;
@@ -112,8 +112,8 @@ impl BingoBoard {
             for y in 0..self.board_size {
                 if !self
                     .board
-                    .get(&Cordinate { x, y })
-                    .expect("Could not retrieve BingoSpace for provided cordinates!")
+                    .get(&Coordinate { x, y })
+                    .expect("Could not retrieve BingoSpace for provided Coordinates!")
                     .is_marked()
                 {
                     // col_winner = false;
@@ -235,7 +235,10 @@ pub fn input_generator(input: &str) -> Bingo {
                     .parse::<usize>()
                     .expect("Error while parsing board value");
 
-                board.insert(Cordinate::new(x_cord, y_cord), BingoSpace::new(board_value));
+                board.insert(
+                    Coordinate::new(x_cord, y_cord),
+                    BingoSpace::new(board_value),
+                );
 
                 x_cord += 1;
             });
