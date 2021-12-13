@@ -81,4 +81,7 @@ fn main() {
     run!(day8, part2_alternate);
     run!(day9);
     run!(day10);
+    run!(day11);
+    run!(day12);
+    run!(day13);
 }

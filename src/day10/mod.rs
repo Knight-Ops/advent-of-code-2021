@@ -165,26 +165,25 @@ pub fn part2(input: &str) -> usize {
             match tok {
                 Token::OpenParen => {
                     score = score * 5 + 1;
-                },
+                }
                 Token::OpenSquare => {
                     score = score * 5 + 2;
-                },
+                }
                 Token::OpenCurly => {
                     score = score * 5 + 3;
-                },
+                }
                 Token::OpenFish => {
                     score = score * 5 + 4;
-                },
-                _ => unreachable!("Remaining token is not an Open* Token")
+                }
+                _ => unreachable!("Remaining token is not an Open* Token"),
             }
         }
 
         scores.push(score);
-        
     }
     scores.sort();
-    
-    scores[scores.len()/2]
+
+    scores[scores.len() / 2]
 }
 
 #[cfg(test)]
