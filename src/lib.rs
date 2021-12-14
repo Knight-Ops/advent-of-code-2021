@@ -13,6 +13,7 @@ pub mod day7;
 pub mod day8;
 pub mod day9;
 pub mod day11;
+pub mod day14;
 
 pub fn read_input_file(input: &str) -> String {
     std::fs::read_to_string(input)
