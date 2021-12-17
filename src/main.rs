@@ -85,4 +85,7 @@ fn main() {
     run!(day12);
     run!(day13);
     run!(day14, part1_slow);
+    // run!(day15);
+    run!(day16);
+    run!(day17);
 }

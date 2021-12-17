@@ -138,7 +138,8 @@ impl CaveSystem {
                         })
                         .filter(|(_, &val)| val == 2)
                         .next()
-                        .is_some() && path.get(conn).is_some()
+                        .is_some()
+                        && path.get(conn).is_some()
                     {
                         total += 0;
                     } else {
